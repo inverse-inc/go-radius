@@ -1,1 +1,1 @@
-module layeh.com/radius
+module github.com/inverse-inc/go-radius
