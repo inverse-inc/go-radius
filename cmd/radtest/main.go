@@ -1,4 +1,4 @@
-package main // import "layeh.com/radius/cmd/radtest"
+package main // import "github.com/inverse-inc/go-radius/cmd/radtest"
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	"layeh.com/radius"
-	. "layeh.com/radius/rfc2865"
+	"github.com/inverse-inc/go-radius"
+	. "github.com/inverse-inc/go-radius/rfc2865"
 )
 
 const usage = `

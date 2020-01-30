@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"layeh.com/radius"
+	radius "github.com/inverse-inc/go-radius"
 )
 
 const (

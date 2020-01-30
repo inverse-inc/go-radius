@@ -249,7 +249,7 @@ type Value struct {
 
 type Vendor struct {
 	Name   string
-	Number int
+	Number uint
 
 	TypeOctets   *int
 	LengthOctets *int

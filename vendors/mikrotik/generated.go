@@ -6,8 +6,8 @@ import (
 	"net"
 	"strconv"
 
-	"layeh.com/radius"
-	"layeh.com/radius/rfc2865"
+	radius "github.com/inverse-inc/go-radius"
+	"github.com/inverse-inc/go-radius/rfc2865"
 )
 
 const (
@@ -2383,4 +2383,98 @@ func MikrotikWirelessMaxsignal_SetString(p *radius.Packet, value string) (err er
 
 func MikrotikWirelessMaxsignal_Del(p *radius.Packet) {
 	_Mikrotik_DelVendor(p, 29)
+}
+
+func MikrotikSwitchingFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _Mikrotik_AddVendor(p, 30, a)
+}
+
+func MikrotikSwitchingFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _Mikrotik_AddVendor(p, 30, a)
+}
+
+func MikrotikSwitchingFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = MikrotikSwitchingFilter_Lookup(p)
+	return
+}
+
+func MikrotikSwitchingFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = MikrotikSwitchingFilter_LookupString(p)
+	return
+}
+
+func MikrotikSwitchingFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _Mikrotik_GetsVendor(p, 30) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func MikrotikSwitchingFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _Mikrotik_GetsVendor(p, 30) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func MikrotikSwitchingFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _Mikrotik_LookupVendor(p, 30)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func MikrotikSwitchingFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _Mikrotik_LookupVendor(p, 30)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func MikrotikSwitchingFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _Mikrotik_SetVendor(p, 30, a)
+}
+
+func MikrotikSwitchingFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _Mikrotik_SetVendor(p, 30, a)
+}
+
+func MikrotikSwitchingFilter_Del(p *radius.Packet) {
+	_Mikrotik_DelVendor(p, 30)
 }

@@ -105,7 +105,7 @@ func VendorByName(vendors []*Vendor, name string) *Vendor {
 	return nil
 }
 
-func VendorByNumber(vendors []*Vendor, number int) *Vendor {
+func VendorByNumber(vendors []*Vendor, number uint) *Vendor {
 	for _, vendor := range vendors {
 		if vendor.Number == number {
 			return vendor
@@ -114,7 +114,7 @@ func VendorByNumber(vendors []*Vendor, number int) *Vendor {
 	return nil
 }
 
-func vendorByNameOrNumber(vendors []*Vendor, name string, number int) *Vendor {
+func vendorByNameOrNumber(vendors []*Vendor, name string, number uint) *Vendor {
 	for _, vendor := range vendors {
 		if vendor.Name == name || vendor.Number == number {
 			return vendor

@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"layeh.com/radius"
-	"layeh.com/radius/debug"
-	. "layeh.com/radius/rfc2865"
-	. "layeh.com/radius/rfc2866"
-	. "layeh.com/radius/rfc2869"
-	. "layeh.com/radius/rfc3162"
+	"github.com/inverse-inc/go-radius"
+	"github.com/inverse-inc/go-radius/debug"
+	. "github.com/inverse-inc/go-radius/rfc2865"
+	. "github.com/inverse-inc/go-radius/rfc2866"
+	. "github.com/inverse-inc/go-radius/rfc2869"
+	. "github.com/inverse-inc/go-radius/rfc3162"
 )
 
 var secret = []byte(`1234567`)

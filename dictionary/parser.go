@@ -455,14 +455,14 @@ func (p *Parser) parseValue(f []string) (*Value, error) {
 func (p *Parser) parseVendor(f []string) (*Vendor, error) {
 	// 3 <= len(f) <= 4
 
-	number, err := strconv.ParseInt(f[2], 10, 32)
+	number, err := strconv.ParseUint(f[2], 10, 32)
 	if err != nil {
 		return nil, err
 	}
 
 	vendor := &Vendor{
 		Name:   f[1],
-		Number: int(number),
+		Number: uint(number),
 	}
 
 	if len(f) == 4 {

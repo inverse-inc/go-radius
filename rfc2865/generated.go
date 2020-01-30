@@ -6,7 +6,7 @@ import (
 	"net"
 	"strconv"
 
-	"layeh.com/radius"
+	radius "github.com/inverse-inc/go-radius"
 )
 
 const (

@@ -122,7 +122,7 @@ type DuplicateVendorError struct {
 }
 
 func (e *DuplicateVendorError) Error() string {
-	return `duplicate vendor "` + e.Vendor.Name + `" (` + strconv.Itoa(e.Vendor.Number) + `)`
+	return `duplicate vendor "` + e.Vendor.Name + `" (` + strconv.FormatUint(uint64(e.Vendor.Number), 10) + `)`
 }
 
 type NestedVendorBlockError struct {

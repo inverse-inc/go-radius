@@ -5,7 +5,7 @@ package rfc3162
 import (
 	"net"
 
-	"layeh.com/radius"
+	radius "github.com/inverse-inc/go-radius"
 )
 
 const (

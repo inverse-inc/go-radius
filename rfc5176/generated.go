@@ -3,7 +3,7 @@
 package rfc5176
 
 import (
-	. "layeh.com/radius/rfc3576"
+	. "github.com/inverse-inc/go-radius/rfc3576"
 )
 
 func init() {
