@@ -133,7 +133,7 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 		go func(buff []byte, remoteAddr net.Addr) {
 			defer s.activeDone()
 
-			secret, err := s.SecretSource.RADIUSSecret(s.ctx, remoteAddr)
+			secret, err := s.SecretSource.RADIUSSecret(s.ctx, remoteAddr, buff)
 			if err != nil {
 				return
 			}
