@@ -133,7 +133,7 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 		go func(buff []byte, remoteAddr net.Addr) {
 			defer s.activeDone()
 
-			secret, err := s.SecretSource.RADIUSSecret(s.ctx, remoteAddr, buff)
+			secret, ctx, err := s.SecretSource.RADIUSSecret(s.ctx, remoteAddr, buff)
 			if err != nil {
 				return
 			}
@@ -173,11 +173,15 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 				requestsLock.Unlock()
 			}()
 
+			if ctx == nil {
+				ctx = s.ctx
+			}
+
 			request := Request{
 				LocalAddr:  conn.LocalAddr(),
 				RemoteAddr: remoteAddr,
 				Packet:     packet,
-				ctx:        s.ctx,
+				ctx:        ctx,
 			}
 
 			s.Handler.ServeRADIUS(&response, &request)
