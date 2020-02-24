@@ -75,6 +75,13 @@ type SecretSource interface {
 	RADIUSSecret(ctx context.Context, remoteAddr net.Addr, raw []byte) ([]byte, context.Context, error)
 }
 
+// SecretSourceFunc
+type SecretSourceFunc func(ctx context.Context, remoteAddr net.Addr, raw []byte) ([]byte, context.Context, error)
+
+func (f SecretSourceFunc) RADIUSSecret(ctx context.Context, remoteAddr net.Addr, raw []byte) ([]byte, context.Context, error) {
+	return f(ctx, remoteAddr, raw)
+}
+
 // StaticSecretSource returns a SecretSource that uses secret for all requests.
 func StaticSecretSource(secret []byte) SecretSource {
 	return &staticSecretSource{secret}
