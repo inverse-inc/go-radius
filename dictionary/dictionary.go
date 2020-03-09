@@ -18,6 +18,20 @@ type Dictionary struct {
 	Vendors         []*Vendor
 }
 
+func (d *Dictionary) GetAttributeByOID(oid OID) *Attribute {
+	var attr *Attribute
+	if len(oid) == 0 {
+		return nil
+	}
+
+	if len(oid) == 1 {
+		if amap, found := d.AttributesByOID.Map[oid[0]]; found {
+			attr = amap.Attribute
+		}
+	}
+	return attr
+}
+
 func (d *Dictionary) GoString() string {
 	var b bytes.Buffer
 	b.WriteString("&dictionary.Dictionary{")

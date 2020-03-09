@@ -167,6 +167,12 @@ func TestParser_override(t *testing.T) {
 		t.Error(diff)
 	}
 
+	a := d.GetAttributeByOID(OID([]int{5}))
+
+	if diff := deep.Equal(a, attributes[1]); diff != nil {
+		t.Error(diff)
+	}
+
 }
 
 func writeAttributesOIDMap(b *bytes.Buffer, amap *AttributesOIDMap, indent string) {
