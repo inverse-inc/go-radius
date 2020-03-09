@@ -44,31 +44,48 @@ func TestParser(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	attributes := []*Attribute{
+		{
+			Name: "User-Name",
+			OID:  OID{1},
+			Type: AttributeString,
+		},
+		{
+			Name:        "User-Password",
+			OID:         OID{2},
+			Type:        AttributeOctets,
+			FlagEncrypt: IntFlag{1, true},
+		},
+		{
+			Name: "Mode",
+			OID:  OID{127},
+			Type: AttributeInteger,
+		},
+		{
+			Name: "ARAP-Challenge-Response",
+			OID:  OID{84},
+			Type: AttributeOctets,
+			Size: IntFlag{8, true},
+		},
+	}
 	expected := &Dictionary{
-		Attributes: []*Attribute{
-			{
-				Name: "User-Name",
-				OID:  OID{1},
-				Type: AttributeString,
-			},
-			{
-				Name:        "User-Password",
-				OID:         OID{2},
-				Type:        AttributeOctets,
-				FlagEncrypt: IntFlag{1, true},
-			},
-			{
-				Name: "Mode",
-				OID:  OID{127},
-				Type: AttributeInteger,
-			},
-			{
-				Name: "ARAP-Challenge-Response",
-				OID:  OID{84},
-				Type: AttributeOctets,
-				Size: IntFlag{8, true},
+		AttributesByOID: AttributesOIDMap{
+			Map: map[int]*AttributesOIDMap{
+				1: &AttributesOIDMap{
+					Attribute: attributes[0],
+				},
+				2: &AttributesOIDMap{
+					Attribute: attributes[1],
+				},
+				127: &AttributesOIDMap{
+					Attribute: attributes[2],
+				},
+				84: &AttributesOIDMap{
+					Attribute: attributes[3],
+				},
 			},
 		},
+		Attributes: attributes,
 		Values: []*Value{
 			{
 				Attribute: "Mode",
@@ -109,6 +126,26 @@ func TestParser_recursiveinclude(t *testing.T) {
 		t.Fatalf("got %v, expected *RecursiveIncludeError", pErr.Inner)
 	}
 }
+
+/*
+func TestParser_override(t *testing.T) {
+	parser := Parser{
+		Opener: &FileSystemOpener{
+			Root: "testdata",
+		},
+	}
+
+	d, err := parser.ParseFile("override.dictionary")
+	if err != nil {
+		t.Fatal(err)
+    }
+
+	expected := &Dictionary{ }
+	if !reflect.DeepEqual(d, expected) {
+		t.Fatalf("got %s, expected %s", dictString(d), dictString(expected))
+	}
+}
+*/
 
 func dictString(d *Dictionary) string {
 	var b bytes.Buffer

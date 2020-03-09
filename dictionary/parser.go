@@ -109,7 +109,7 @@ func (p *Parser) parse(dict *Dictionary, parsedFiles map[string]struct{}, f File
 			}
 
 			if vendorBlock == nil {
-				dict.Attributes = append(dict.Attributes, attr)
+				dict.addAttribute(attr)
 			} else {
 				vendorBlock.Attributes = append(vendorBlock.Attributes, attr)
 			}

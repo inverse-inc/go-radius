@@ -6,10 +6,16 @@ import (
 	"strconv"
 )
 
+type AttributesOIDMap struct {
+	Attribute *Attribute
+	Map       map[int]*AttributesOIDMap
+}
+
 type Dictionary struct {
-	Attributes []*Attribute
-	Values     []*Value
-	Vendors    []*Vendor
+	AttributesByOID AttributesOIDMap
+	Attributes      []*Attribute
+	Values          []*Value
+	Vendors         []*Vendor
 }
 
 func (d *Dictionary) GoString() string {
@@ -42,6 +48,27 @@ func (d *Dictionary) GoString() string {
 
 	b.WriteString("}")
 	return b.String()
+}
+
+func (d *Dictionary) addAttribute(a *Attribute) {
+	d.Attributes = append(d.Attributes, a)
+	if d.AttributesByOID.Map == nil {
+		d.AttributesByOID.Map = make(map[int]*AttributesOIDMap)
+	}
+
+	curr := &d.AttributesByOID
+
+	var i int
+	for i = 0; i < len(a.OID)-1; i++ {
+		oid := a.OID[i]
+		if curr, found := curr.Map[oid]; !found {
+			next := &AttributesOIDMap{Map: make(map[int]*AttributesOIDMap)}
+			curr.Map[oid] = next
+			curr = next
+		}
+	}
+
+	curr.Map[a.OID[i]] = &AttributesOIDMap{Attribute: a}
 }
 
 type AttributeType int
