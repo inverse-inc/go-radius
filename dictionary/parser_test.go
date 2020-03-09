@@ -3,6 +3,7 @@ package dictionary
 import (
 	"bytes"
 	"fmt"
+	"github.com/go-test/deep"
 	"reflect"
 	"testing"
 )
@@ -127,7 +128,6 @@ func TestParser_recursiveinclude(t *testing.T) {
 	}
 }
 
-/*
 func TestParser_override(t *testing.T) {
 	parser := Parser{
 		Opener: &FileSystemOpener{
@@ -138,19 +138,55 @@ func TestParser_override(t *testing.T) {
 	d, err := parser.ParseFile("override.dictionary")
 	if err != nil {
 		t.Fatal(err)
-    }
-
-	expected := &Dictionary{ }
-	if !reflect.DeepEqual(d, expected) {
-		t.Fatalf("got %s, expected %s", dictString(d), dictString(expected))
 	}
+
+	attributes := []*Attribute{
+		{
+			Name: "Test-Name",
+			OID:  OID{5},
+			Type: AttributeString,
+		},
+		{
+			Name: "Test-Name2",
+			OID:  OID{5},
+			Type: AttributeString,
+		},
+	}
+	expected := &Dictionary{
+		AttributesByOID: AttributesOIDMap{
+			Map: map[int]*AttributesOIDMap{
+				5: &AttributesOIDMap{
+					Attribute: attributes[1],
+				},
+			},
+		},
+		Attributes: attributes,
+	}
+
+	if diff := deep.Equal(d, expected); diff != nil {
+		t.Error(diff)
+	}
+
 }
-*/
+
+func writeAttributesOIDMap(b *bytes.Buffer, amap *AttributesOIDMap, indent string) {
+	/*
+	       if amap.Attribute != nil {
+	           attr := amap.Attribute
+	   		b.WriteString(fmt.Sprintf("%s: %q %q %q %#v %#v\n",indent , attr.Name, attr.OID, attr.Type, attr.FlagHasTag, attr.FlagEncrypt))
+	       }
+	*/
+	b.WriteString(fmt.Sprintf("%s%#v\n", indent, amap))
+}
 
 func dictString(d *Dictionary) string {
 	var b bytes.Buffer
 	b.WriteString("dictionary.Dictionary\n")
 
+	b.WriteString("\tAttributesByOID:\n")
+	for _, attr := range d.AttributesByOID.Map {
+		writeAttributesOIDMap(&b, attr, "\t\t")
+	}
 	b.WriteString("\tAttributes:\n")
 	for _, attr := range d.Attributes {
 		b.WriteString(fmt.Sprintf("\t\t%q %q %q %#v %#v\n", attr.Name, attr.OID, attr.Type, attr.FlagHasTag, attr.FlagEncrypt))
