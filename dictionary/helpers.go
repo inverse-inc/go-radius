@@ -57,7 +57,9 @@ func Merge(d1, d2 *Dictionary) (*Dictionary, error) {
 		for _, vendor := range d2.Vendors {
 			existingVendor := VendorByNumber(newDict.Vendors, vendor.Number)
 			if existingVendor != nil {
-				existingVendor.Attributes = append(existingVendor.Attributes, vendor.Attributes...)
+				for _, a := range vendor.Attributes {
+					existingVendor.addAttribute(a)
+				}
 				existingVendor.Values = append(existingVendor.Values, vendor.Values...)
 			} else {
 				newDict.Vendors = append(newDict.Vendors, vendor)

@@ -307,8 +307,9 @@ type Vendor struct {
 	TypeOctets   *int
 	LengthOctets *int
 
-	Attributes []*Attribute
-	Values     []*Value
+	AttributesByOID AttributesOIDMap
+	Attributes      []*Attribute
+	Values          []*Value
 }
 
 func (a *Vendor) Equals(b *Vendor) bool {
@@ -321,6 +322,15 @@ func (a *Vendor) Equals(b *Vendor) bool {
 	}
 
 	return a.Name == b.Name && a.Number == a.Number
+}
+
+func (v *Vendor) GetAttributeByOID(oid OID) *Attribute {
+	return v.AttributesByOID.getAttribute(oid)
+}
+
+func (v *Vendor) addAttribute(a *Attribute) {
+	v.Attributes = append(v.Attributes, a)
+	v.AttributesByOID.addAttribute(a.OID, a)
 }
 
 func (v *Vendor) GetTypeOctets() int {

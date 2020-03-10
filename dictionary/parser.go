@@ -111,7 +111,7 @@ func (p *Parser) parse(dict *Dictionary, parsedFiles map[string]struct{}, f File
 			if vendorBlock == nil {
 				dict.addAttribute(attr)
 			} else {
-				vendorBlock.Attributes = append(vendorBlock.Attributes, attr)
+				vendorBlock.addAttribute(attr)
 			}
 
 		case len(fields) == 4 && fields[0] == "VALUE":

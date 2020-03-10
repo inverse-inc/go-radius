@@ -1,7 +1,7 @@
 package dictionary
 
 import (
-	"reflect"
+	"github.com/go-test/deep"
 	"testing"
 )
 
@@ -26,28 +26,40 @@ func TestMerge(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	vendorAttributes := []*Attribute{
+		{
+			Name: "Test-Vendor-Name",
+			Type: AttributeString,
+			OID:  OID{5},
+		},
+		{
+			Name: "Test-Vendor-Int",
+			Type: AttributeInteger,
+			OID:  OID{10},
+		},
+	}
 	expected := &Dictionary{
 		Vendors: []*Vendor{
 			{
-				Name:   "Test",
-				Number: 32473,
-				Attributes: []*Attribute{
-					{
-						Name: "Test-Vendor-Name",
-						Type: AttributeString,
-						OID:  OID{5},
-					},
-					{
-						Name: "Test-Vendor-Int",
-						Type: AttributeInteger,
-						OID:  OID{10},
+				Name:       "Test",
+				Number:     32473,
+				Attributes: vendorAttributes,
+				AttributesByOID: AttributesOIDMap{
+					Map: map[int]*AttributesOIDMap{
+						5: &AttributesOIDMap{
+							Attribute: vendorAttributes[0],
+						},
+						10: &AttributesOIDMap{
+							Attribute: vendorAttributes[1],
+						},
 					},
 				},
 			},
 		},
 	}
 
-	if !reflect.DeepEqual(merged, expected) {
-		t.Fatalf("got:\n%#v\nexpected:\n%#v", merged, expected)
+	if diff := deep.Equal(merged, expected); diff != nil {
+		t.Error(diff)
 	}
+
 }
