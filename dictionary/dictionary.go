@@ -11,6 +11,44 @@ type AttributesOIDMap struct {
 	Map       map[int]*AttributesOIDMap
 }
 
+func (om *AttributesOIDMap) addAttribute(oid OID, a *Attribute) {
+	if len(oid) == 0 {
+		return
+	}
+
+	if om.Map == nil {
+		om.Map = make(map[int]*AttributesOIDMap)
+	}
+
+	id := oid[0]
+	var curr *AttributesOIDMap
+	var found bool
+	if curr, found = om.Map[id]; !found {
+		curr = &AttributesOIDMap{}
+		om.Map[id] = curr
+	}
+
+	if len(oid) == 1 {
+		curr.Attribute = a
+	} else {
+		curr.addAttribute(oid[1:], a)
+	}
+}
+
+func (om *AttributesOIDMap) getAttribute(oid OID) *Attribute {
+	if len(oid) == 0 {
+		return nil
+	}
+
+	id := oid[0]
+	curr := om.Map[id]
+	if len(oid) == 1 {
+		return curr.Attribute
+	}
+
+	return curr.getAttribute(oid[1:])
+}
+
 type Dictionary struct {
 	AttributesByOID AttributesOIDMap
 	Attributes      []*Attribute
@@ -19,17 +57,7 @@ type Dictionary struct {
 }
 
 func (d *Dictionary) GetAttributeByOID(oid OID) *Attribute {
-	var attr *Attribute
-	if len(oid) == 0 {
-		return nil
-	}
-
-	if len(oid) == 1 {
-		if amap, found := d.AttributesByOID.Map[oid[0]]; found {
-			attr = amap.Attribute
-		}
-	}
-	return attr
+	return d.AttributesByOID.getAttribute(oid)
 }
 
 func (d *Dictionary) GoString() string {
@@ -66,23 +94,7 @@ func (d *Dictionary) GoString() string {
 
 func (d *Dictionary) addAttribute(a *Attribute) {
 	d.Attributes = append(d.Attributes, a)
-	if d.AttributesByOID.Map == nil {
-		d.AttributesByOID.Map = make(map[int]*AttributesOIDMap)
-	}
-
-	curr := &d.AttributesByOID
-
-	var i int
-	for i = 0; i < len(a.OID)-1; i++ {
-		oid := a.OID[i]
-		if curr, found := curr.Map[oid]; !found {
-			next := &AttributesOIDMap{Map: make(map[int]*AttributesOIDMap)}
-			curr.Map[oid] = next
-			curr = next
-		}
-	}
-
-	curr.Map[a.OID[i]] = &AttributesOIDMap{Attribute: a}
+	d.AttributesByOID.addAttribute(a.OID, a)
 }
 
 type AttributeType int
