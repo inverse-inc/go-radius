@@ -54,6 +54,30 @@ type Dictionary struct {
 	Attributes      []*Attribute
 	Values          []*Value
 	Vendors         []*Vendor
+	VendorByName    map[string]*Vendor
+	VendorByNumber  map[uint]*Vendor
+}
+
+func (d *Dictionary) addVendor(v *Vendor) {
+	if d.VendorByName == nil {
+		d.VendorByName = make(map[string]*Vendor)
+	}
+
+	if d.VendorByNumber == nil {
+		d.VendorByNumber = make(map[uint]*Vendor)
+	}
+
+	d.Vendors = append(d.Vendors, v)
+	d.VendorByName[v.Name] = v
+	d.VendorByNumber[v.Number] = v
+}
+
+func (d *Dictionary) GetVendorByNumber(num uint) *Vendor {
+	return d.VendorByNumber[num]
+}
+
+func (d *Dictionary) GetVendorByName(name string) *Vendor {
+	return d.VendorByName[name]
 }
 
 func (d *Dictionary) GetAttributeByOID(oid OID) *Attribute {

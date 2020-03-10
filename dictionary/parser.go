@@ -143,7 +143,7 @@ func (p *Parser) parse(dict *Dictionary, parsedFiles map[string]struct{}, f File
 			}
 
 			if existing := vendorByNameOrNumber(dict.Vendors, vendor.Name, vendor.Number); existing == nil || !vendor.Equals(existing) {
-				dict.Vendors = append(dict.Vendors, vendor)
+				dict.addVendor(vendor)
 			}
 
 		case len(fields) == 2 && fields[0] == "BEGIN-VENDOR":
