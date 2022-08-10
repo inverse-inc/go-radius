@@ -146,7 +146,7 @@ func (p *Parser) parse(dict *Dictionary, parsedFiles map[string]struct{}, f File
 				dict.addVendor(vendor)
 			}
 
-		case len(fields) == 2 && fields[0] == "BEGIN-VENDOR":
+		case len(fields) >= 2 && fields[0] == "BEGIN-VENDOR":
 			// TODO: support RFC 6929 extended VSA?
 
 			if vendorBlock != nil {
