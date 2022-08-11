@@ -73,7 +73,7 @@ func (p *Parser) parse(dict *Dictionary, parsedFiles map[string]struct{}, f File
 
 		fields := strings.Fields(line)
 		switch {
-		case (len(fields) == 4 || len(fields) == 5) && (fields[0] == "ATTRIBUTE" || fields[0] == "VENDORATTR" ):
+		case (len(fields) == 4 || len(fields) == 5) && (fields[0] == "ATTRIBUTE" || fields[0] == "VENDORATTR"):
 			attr, err := p.parseAttribute(fields)
 			if err != nil {
 				switch err.(type) {
@@ -416,6 +416,8 @@ func (p *Parser) parseAttribute(f []string) (*Attribute, error) {
 					Bool:  true,
 				}
 			case f == "virtual":
+				continue
+			case f == "secret":
 				continue
 			default:
 				return nil, &UnknownAttributeFlagError{
