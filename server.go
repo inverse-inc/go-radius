@@ -72,7 +72,7 @@ type ResponseWriter interface {
 //
 // Returning an empty secret will discard the incoming packet.
 type SecretSource interface {
-	RADIUSSecret(ctx context.Context, remoteAddr net.Addr) ([]byte, error)
+	RADIUSSecret(ctx context.Context, remoteAddr net.Addr, raw []byte) ([]byte, context.Context, error)
 }
 
 // StaticSecretSource returns a SecretSource that uses secret for all requests.
@@ -84,6 +84,6 @@ type staticSecretSource struct {
 	secret []byte
 }
 
-func (s *staticSecretSource) RADIUSSecret(ctx context.Context, remoteAddr net.Addr) ([]byte, error) {
-	return s.secret, nil
+func (s *staticSecretSource) RADIUSSecret(ctx context.Context, remoteAddr net.Addr, raw []byte) ([]byte, context.Context, error) {
+	return s.secret, ctx, nil
 }

@@ -146,7 +146,7 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 		go func(buff []byte, remoteAddr net.Addr) {
 			defer s.activeDone()
 
-			secret, err := s.SecretSource.RADIUSSecret(s.ctx, remoteAddr)
+			secret, ctx, err := s.SecretSource.RADIUSSecret(s.ctx, remoteAddr, buff)
 			if err != nil {
 				s.logf("radius: error fetching from secret source: %v", err)
 				return
@@ -195,7 +195,7 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 				LocalAddr:  conn.LocalAddr(),
 				RemoteAddr: remoteAddr,
 				Packet:     packet,
-				ctx:        s.ctx,
+				ctx:        ctx,
 			}
 
 			s.Handler.ServeRADIUS(&response, &request)
