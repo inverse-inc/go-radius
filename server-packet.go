@@ -3,6 +3,7 @@ package radius
 import (
 	"context"
 	"errors"
+	"log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -142,6 +143,7 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 			}
 
 			if !s.InsecureSkipVerify && !IsAuthenticRequest(buff, secret) {
+				log.Printf("RADIUS authentication failed: invalid shared secret from %v", remoteAddr)
 				return
 			}
 
