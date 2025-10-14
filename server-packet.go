@@ -143,7 +143,7 @@ func (s *PacketServer) Serve(conn net.PacketConn) error {
 			}
 
 			if !s.InsecureSkipVerify && !IsAuthenticRequest(buff, secret) {
-				log.Printf("RADIUS authentication failed: invalid shared secret from %v", remoteAddr)
+				log.Printf("RADIUS accounting failed: invalid shared secret from %v", remoteAddr)
 				return
 			}
 
